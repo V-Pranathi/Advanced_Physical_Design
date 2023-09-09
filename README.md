@@ -58,20 +58,72 @@ ASIC flow objective : RTL to GDS II format used for final layout. The flow is of
 
 #### Simplified RTL2GDS flow ####
 
-![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/50eabee3-2efc-4c60-96b6-cb7e35e8aaea)  
+  ![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/50eabee3-2efc-4c60-96b6-cb7e35e8aaea)  
 
 * **Synthesis**  The RTL code is synthesized to create a gate-level netlist. This process involves translating the RTL code into a (circuit)network of standard cells (AND, OR, flip-flops, etc.) that can be found in a Standard cell library.
 
   ![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/d787dbf1-9de4-41e4-b985-ad63665f60eb)
  
-* **Floor/Power Planning** The objective is to plan the silicon area and robust power distribution network to power the circuits. By performing floorplanning we determine the approximate placement of the various logic elements on the silicon die. This step helps optimize the chip's area, power consumption, and performance.
-  _Chip-Floor Planning_ Partition the chip die between different system building blocks and place the I/O pads.
-  _Macro-Floor Planning_ In macro-floor planning we define the macro dimensions and its pin locations. WE also define row definitions which is used in placement process.
-  _Power PLanning_ Power planning is the process of managing and distributing electrical power within an IC to ensure proper functionality, performance, and reliability while minimizing power consumption.
-* **Placement**  PLace the cells on the floorplan rows aligned with the sites. Placement is done in two steps 1) GLobal 2) Detailed. 
-* **Clock Tree Synthesis**
-* **Routing**
-* **Signoff**
+* **Floor/Power Planning** The objective is to plan the silicon area and robust power distribution network to power the circuits. By performing floorplanning we determine the approximate placement of the various logic elements on the silicon die. This step helps optimize the chip's area, power consumption, and performance.  
+  _Chip-Floor Planning_ Partition the chip die between different system building blocks and place the I/O pads.  
+  _Macro-Floor Planning_ In macro-floor planning we define the macro dimensions and its pin locations. WE also define row definitions which is used in placement process.  
+  _Power PLanning_ Power planning is the process of managing and distributing electrical power within an IC to ensure proper functionality, performance, and reliability while minimizing power consumption.  
+* **Placement**  Place the cells on the floorplan rows aligned with the sites. Placement is done in two steps 1) GLobal 2) Detailed.  
+  _Global_ Global placement is the initial phase of placement in IC design. It involves placing the major functional blocks of the design onto the chip's floorplan while considering high-level objectives like chip area, wirelength, and approximate positions of the blocks.  
+  _Detailed_ Detailed placement follows global placement and focuses on refining the positions of individual cells, gates, and standard cells within the functional blocks. It involves optimizing the placement at a finer granularity.   
+* **Clock Tree Synthesis** Clock Tree Synthesis (CTS) is a crucial step in the physical design phase of integrated circuit (IC) design. It involves the generation and optimization of a clock distribution network within the chip to ensure that clock signals are delivered accurately and efficiently to all sequential elements (like flip-flops and latches) while meeting timing requirements. The primary goals of CTS are to minimize clock skew, reduce clock latency, and enhance overall chip performance and power efficiency.  
+* **Routing** Routing is a fundamental step in the physical design phase of integrated circuit (IC) design. It involves the creation of metal interconnects (wires) that connect various components, such as logic gates, memory cells, and input/output (I/O) pins, on the semiconductor chip's layout. Effective routing is crucial for ensuring the chip meets performance, power, and area (PPA) requirements. 
+* **Signoff** signoff" refers to a critical phase in the design and verification process. Signoff is the final stage where various checks and analyses are performed to ensure that the design meets all specifications, performance requirements, and manufacturing criteria before it is sent for fabrication. The term "signoff" signifies the formal approval or endorsement of the design, indicating that it is ready for production. 
+  _Physical Verification_ The design layout is subjected to physical verification checks, which include **Design Rule Checking (DRC)** and **Layout vs. Schematic (LVS) checks**. DRC ensures that the design adheres to the foundry's manufacturing rules, while LVS confirms that the layout matches the intended schematic.  
+  _Timing Verification_ Static Timing Analysis (STA), Timing analysis tools are used to verify that all timing constraints, including setup and hold times, are met across the entire design. Any violations must be addressed before signoff.  
+#### OpenLANE ASIC Flow #### 
+**Various steps involve in OpenLANE ASIC Flow**  
+
+* RTL Synthesis, Technology Mapping, and Formal Verification:  
+        Tools: Yosys (for RTL synthesis), ABC (for technology mapping and formal verification).  
+
+* Static Timing Analysis:  
+        Tool: OpenSTA (for static timing analysis).  
+
+* Floor Planning:  
+        Tools: init_fp (initial floorplanning), ioPlacer (I/O placement), pdn (power distribution network planning), tapcell (tap cell insertion).  
+
+* Placement:  
+        Tools: RePLace (global placement), Resizer (optional for resizing cells), OpenPhySyn (formerly used for placement), OpenDP (detailed placement).  
+
+* Clock Tree Synthesis:  
+        Tool: TritonCTS (for clock tree synthesis).  
+
+* Fill Insertion:  
+        Tools: OpenDP (for filler placement).  
+
+* Routing:  
+        Global Routing: FastRoute or CU-GR (formerly used).  
+        Detailed Routing: TritonRoute (for detailed routing) or DR-CU (formerly used).  
+
+* SPEF Extraction:  
+        Tools: OpenRCX (or SPEF-Extractor, formerly used) for Standard Parasitic Exchange Format (SPEF) extraction.  
+
+* GDSII Streaming Out:  
+        Tools: Magic and KLayout (for viewing and editing GDSII files).  
+
+* Design Rule Checking (DRC) Checks:  
+        Tools: Magic and KLayout (for DRC checks). 
+
+* Layout vs. Schematic (LVS) Check:  
+        Tool: Netgen (for LVS checks).  
+
+* Antenna Checks:  
+        Tool: Magic (for antenna checks).  
+
+* Circuit Validity Checker:  
+        Tool: CVC (for circuit validity checking).  
+
+These open-source tools, when used collectively, provide a complete and automated ASIC design and verification flow through OpenLane. 
+
+
+![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/b9efd0fc-ac49-40f1-a0ca-0f0a5c7b2794)
+
   
 
 

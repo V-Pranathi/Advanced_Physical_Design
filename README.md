@@ -60,12 +60,18 @@ ASIC flow objective : RTL to GDS II format used for final layout. The flow is of
 
 ![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/50eabee3-2efc-4c60-96b6-cb7e35e8aaea)  
 
-* Synthesis  
-* Floor/Power Planning
-* Placement  
-* Clock Tree Synthesis
-* Routing
-* Signoff
+* **Synthesis**  The RTL code is synthesized to create a gate-level netlist. This process involves translating the RTL code into a (circuit)network of standard cells (AND, OR, flip-flops, etc.) that can be found in a Standard cell library.
+
+  ![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/d787dbf1-9de4-41e4-b985-ad63665f60eb)
+ 
+* **Floor/Power Planning** The objective is to plan the silicon area and robust power distribution network to power the circuits. By performing floorplanning we determine the approximate placement of the various logic elements on the silicon die. This step helps optimize the chip's area, power consumption, and performance.
+  _Chip-Floor Planning_ Partition the chip die between different system building blocks and place the I/O pads.
+  _Macro-Floor Planning_ In macro-floor planning we define the macro dimensions and its pin locations. WE also define row definitions which is used in placement process.
+  _Power PLanning_ Power planning is the process of managing and distributing electrical power within an IC to ensure proper functionality, performance, and reliability while minimizing power consumption.
+* **Placement**  PLace the cells on the floorplan rows aligned with the sites. Placement is done in two steps 1) GLobal 2) Detailed. 
+* **Clock Tree Synthesis**
+* **Routing**
+* **Signoff**
   
 
 

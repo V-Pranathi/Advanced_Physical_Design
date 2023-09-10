@@ -149,7 +149,15 @@ These open-source tools, when used collectively, provide a complete and automate
 
 ![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/91e96179-e974-47f5-b9e7-1f6d65acd860)
 
-**Viewing the netlist**
+**Viewing the netlist**  
+
+    cd /home/pranathi/OpenLane/designs/picorv32a/runs/RUN_2023.09.10_05.15.33/results/synthesis
+    gedit picor32a.v
+
+![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/363b2c29-175c-4380-99c5-5adb0c3c6f8c)
+
+![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/5db18bd3-2772-4c24-b3f7-1fefe532de62)
+
 
 
    

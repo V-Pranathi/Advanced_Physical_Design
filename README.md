@@ -128,6 +128,33 @@ These open-source tools, when used collectively, provide a complete and automate
 
 ![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/b9efd0fc-ac49-40f1-a0ca-0f0a5c7b2794)
 
+#### Steps to install OpenLane ####
+    
+    cd $HOME
+    git clone https://github.com/The-OpenROAD-Project/OpenLane --recurse-submodules 
+    cd OpenLane
+    make
+    make test
+    cd /home/pranathi/OpenLane/designs/ci
+    cp -r * ../
+
+#### Invoking and running synthesis OpenLane ####
+
+    cd ~/OpenLane
+    make mount
+    ./flow.tcl -interactive
+    package require openlane 0.9
+    prep -design picorv32a
+    run_synthesis
+
+![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/91e96179-e974-47f5-b9e7-1f6d65acd860)
+
+**Viewing the netlist**
+
+
+   
+
+
   
 
 

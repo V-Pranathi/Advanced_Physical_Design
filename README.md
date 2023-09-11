@@ -2,17 +2,32 @@
 Advanced Physical Design using OpenLANE/Sky130 
 ## Table of Contents
 * [1.Introduction](#1-introduction)
-* [2.Day 1 - Inception of open-source EDA, OpenLANE and Sky130 PDK](#day-1---inception-of-open-source-eda--openlane-and-sky130-pdk)
+* [2.Day 1 - Inception of open-source EDA, OpenLANE and Sky130 PDK](#2-day-1---inception-of-open-source-eda--openlane-and-sky130-pdk)
   * [2.1 Fundamental terms](#2-1-fundamental-terms)
   * [2.2 SoC design and OpenLANE](#2-2-soc-design-and-openlane)
   * [2.3 OpenLane ASIC flow](#2-3-openlane-asic-flow)
+* [3.Day 2 - Good floorplan vs bad floorplan and introduction to library cells](#3-day-2---good-floorplan-vs-bad-floorplan-and-introduction-to-library-cells)
+  * [3.1 Floor Planning Considerations](#3-1-floor-planning-Considerations)
+     * [3.1.1 Utilization factor and aspect ratio ](#3-1-1-utilization-factor-and-aspect-ratio)
+     * [3.1.2 Pre-placed cells](#3-1-2-pre-placed-cells)
+     * [3.1.3 Decoupling capacitors](#3-1-3-decoupling-capacitors)
+     * [3.1.4 Power Planning](#3-1-4-power-planning)
+     * [3.1.5 Pin Placement](#3-1-5-pin-placement)
+  * [3.2 Performing Floor Planning and Placement in OpenLane](#3-2-performing-floor-planning-and-placement-in-openlane)
+  * [3.3 Cell design and characterization flows](#3-3-cell-design-and-characterization-flows)
+  * [3.4 General timing characterization parameters](#3-4-general-timing-characterization-parameters)
+
+Decoupling capacitors
+Power Planning
+Pin Placement
+Floorplan run on OpenLANE & view in Magic 
  
 ## <a name="1-introduction"></a> 1.Introduction ##  
 Electronic Design Automation (EDA) tools are essential for designing and simulating electronic circuits and systems. There are several open-source EDA tools available that provide various functionalities for electronic design.   
 OpenLane is an open-source digital ASIC (Application-Specific Integrated Circuit) design flow that utilizes various open-source EDA (Electronic Design Automation) tools and resources to automate the design process for semiconductor manufacturing. OpenLane provides a complete RTL-to-GDSII (Register-Transfer Level to Graphic Data System II) design flow for digital ASICs. It leverages open-source EDA tools like Yosys for synthesis, ABC for technology mapping, and Magic for physical design. OpenLane streamlines the process of designing digital ASICs.  
 SkyWater Technology Foundry offers semiconductor manufacturing services, including access to their 130nm technology node. This means that designers who have completed their ASIC designs using OpenLane can potentially use SkyWater's manufacturing services to produce physical chips based on their designs.  
 
-## <a name="day-1---inception-of-open-source-eda--openlane-and-sky130-pdk"></a> 2.Day 1 - Inception of open-source EDA, OpenLANE and Sky130 PDK
+## <a name="2-day-1---inception-of-open-source-eda--openlane-and-sky130-pdk"></a> 2.Day 1 - Inception of open-source EDA, OpenLANE and Sky130 PDK
 ### <a name="2-1-fundamental-terms"></a> 2.1 Fundamental terms ###
 **Package:** In semiconductor technology, a package refers to the protective enclosure or casing that houses the semiconductor chip (IC). The package provides physical protection to the chip, as well as electrical connections to the outside world through pins or leads. Packages come in various shapes and sizes, and the choice of package can impact the performance and thermal characteristics of the IC. One such package is QFN-48 package.
 _QFN-48 package_ - A QFN-48 package is a type of surface-mount integrated circuit (IC) package commonly used for various electronic components, such as microcontrollers, microprocessors, and other integrated circuits. "QFN" stands for "Quad Flat No-Lead," which describes the package's physical characteristics.

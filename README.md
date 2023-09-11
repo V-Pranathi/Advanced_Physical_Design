@@ -164,7 +164,7 @@ These open-source tools, when used collectively, provide a complete and automate
 
 ![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/4eedeee2-d488-4ba5-afec-00378e90cfe3)
 
-<p align="center"> $Flop ratio =  Number of flops/Total number of cells =  1596/10104 = 0.1579 = 15.79$% </p>  
+<p align="center"> $Flop_ratio =  Number_of_flops/Total_number_of_cells =  1596/10104 = 0.1579 = 15.79$% </p>  
 
 
 

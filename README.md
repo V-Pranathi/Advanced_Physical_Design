@@ -156,11 +156,17 @@ These open-source tools, when used collectively, provide a complete and automate
 
 ![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/363b2c29-175c-4380-99c5-5adb0c3c6f8c)
 
-![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/5db18bd3-2772-4c24-b3f7-1fefe532de62)
+![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/5db18bd3-2772-4c24-b3f7-1fefe532de62)  
+
+**Calculating the flop ratio using synthesis reports**  
+
+![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/e92464fb-d463-455c-9a25-02aff3cd153f)
+
+![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/4eedeee2-d488-4ba5-afec-00378e90cfe3)
+
+<p align="center"> **Flop Ratio = NUmber of flops/Total number of cells =1596/10104 = 0.1579 = 15.79%** </p>  
 
 
-
-   
 
 
   

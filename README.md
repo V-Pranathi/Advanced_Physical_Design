@@ -17,11 +17,6 @@ Advanced Physical Design using OpenLANE/Sky130
   * [3.3 Cell design and characterization flows](#3-3-cell-design-and-characterization-flows)
   * [3.4 General timing characterization parameters](#3-4-general-timing-characterization-parameters)
 
-Decoupling capacitors
-Power Planning
-Pin Placement
-Floorplan run on OpenLANE & view in Magic 
- 
 ## <a name="1-introduction"></a> 1.Introduction ##  
 Electronic Design Automation (EDA) tools are essential for designing and simulating electronic circuits and systems. There are several open-source EDA tools available that provide various functionalities for electronic design.   
 OpenLane is an open-source digital ASIC (Application-Specific Integrated Circuit) design flow that utilizes various open-source EDA (Electronic Design Automation) tools and resources to automate the design process for semiconductor manufacturing. OpenLane provides a complete RTL-to-GDSII (Register-Transfer Level to Graphic Data System II) design flow for digital ASICs. It leverages open-source EDA tools like Yosys for synthesis, ABC for technology mapping, and Magic for physical design. OpenLane streamlines the process of designing digital ASICs.  
@@ -182,11 +177,23 @@ These open-source tools, when used collectively, provide a complete and automate
 ![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/4eedeee2-d488-4ba5-afec-00378e90cfe3)
 
 <p align="center"> Flop ratio =  Number of flops/Total number of cells =  1596/10104 = 0.1579 = 15.79% </p>  
-\[ {\text{FLop ratio}} = \frac{{\text{Number of FLOPs}}}{{\text{Total Number of Cells}}} \]
 
 ## <a name="3-day-2---good-floorplan-vs-bad-floorplan-and-introduction-to-library-cells"></a> 3.Day 2 - Good floorplan vs bad floorplan and introduction to library cells ##
 ### <a name="3-1-floor-planning-Considerations"></a> 3.1 Floor Planning Considerations ###
 #### <a name="3-1-1-utilization-factor-and-aspect-ratio"></a> 3.1.1 Utilization factor and aspect ratio ###  
+In the context of floor planning in the field of integrated circuit design and layout, two important factors to consider are the "utilization factor" and the "aspect ratio."
+
+    Utilisation Factor =  Area occupied by netlist
+                         __________________________
+                             Total area of core
+                        
+    Aspect Ratio =  Height
+                   ________
+                    Width
+
+In practice, a utilization factor of 1 (100% utilization) is often unattainable due to various design considerations, including the need for buffer zones, routing channels, and other overhead. A utilization factor of 0.5 to 0.6 is much more typical and allows for these necessary design elements and potential future modifications. Regarding the aspect ratio, a value of 1 indicates a square-shaped chip, while any other value implies a rectangular shape. The choice of aspect ratio can depend on factors such as the chip's function, available package sizes, and manufacturing constraints.  
+
+#### <a name="3-1-2-pre-placed-cells></a> 3.1.2 Pre-placed cells ####
 
 
 

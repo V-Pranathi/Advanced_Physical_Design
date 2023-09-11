@@ -182,11 +182,11 @@ These open-source tools, when used collectively, provide a complete and automate
 ![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/4eedeee2-d488-4ba5-afec-00378e90cfe3)
 
 <p align="center"> Flop ratio =  Number of flops/Total number of cells =  1596/10104 = 0.1579 = 15.79% </p>  
+\[ {\text{FLop ratio}} = \frac{{\text{Number of FLOPs}}}{{\text{Total Number of Cells}}} \]
 
 ## <a name="3-day-2---good-floorplan-vs-bad-floorplan-and-introduction-to-library-cells"></a> 3.Day 2 - Good floorplan vs bad floorplan and introduction to library cells ##
 ### <a name="3-1-floor-planning-Considerations"></a> 3.1 Floor Planning Considerations ###
 #### <a name="3-1-1-utilization-factor-and-aspect-ratio"></a> 3.1.1 Utilization factor and aspect ratio ###  
-
 
 
 

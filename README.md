@@ -186,14 +186,15 @@ In the context of floor planning in the field of integrated circuit design and l
     Utilisation Factor =  Area occupied by netlist
                          __________________________
                              Total area of core
-                        
+                             
+
     Aspect Ratio =  Height
                    ________
                     Width
 
 In practice, a utilization factor of 1 (100% utilization) is often unattainable due to various design considerations, including the need for buffer zones, routing channels, and other overhead. A utilization factor of 0.5 to 0.6 is much more typical and allows for these necessary design elements and potential future modifications. Regarding the aspect ratio, a value of 1 indicates a square-shaped chip, while any other value implies a rectangular shape. The choice of aspect ratio can depend on factors such as the chip's function, available package sizes, and manufacturing constraints.  
 
-#### <a name="3-1-2-pre-placed-cells></a> 3.1.2 Pre-placed cells ####
+#### <a name="3-1-2-pre-placed-cells"></a> 3.1.2 Pre-placed cells #### 
 
 
 

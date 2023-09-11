@@ -5,6 +5,8 @@ Advanced Physical Design using OpenLANE/Sky130
 * [2.Day 1 - Inception of open-source EDA, OpenLANE and Sky130 PDK](#day-1---inception-of-open-source-eda--openlane-and-sky130-pdk)
   * [2.1 Fundamental terms](#2-1-fundamental-terms)
   * [2.2 SoC design and OpenLANE](#2-2-soc-design-and-openlane)
+  * [2.3 OpenLane ASIC flow](#2-3-openlane-asic-flow)
+ 
 ## <a name="1-introduction"></a> 1.Introduction ##  
 Electronic Design Automation (EDA) tools are essential for designing and simulating electronic circuits and systems. There are several open-source EDA tools available that provide various functionalities for electronic design.   
 OpenLane is an open-source digital ASIC (Application-Specific Integrated Circuit) design flow that utilizes various open-source EDA (Electronic Design Automation) tools and resources to automate the design process for semiconductor manufacturing. OpenLane provides a complete RTL-to-GDSII (Register-Transfer Level to Graphic Data System II) design flow for digital ASICs. It leverages open-source EDA tools like Yosys for synthesis, ABC for technology mapping, and Magic for physical design. OpenLane streamlines the process of designing digital ASICs.  
@@ -79,7 +81,7 @@ ASIC flow objective : RTL to GDS II format used for final layout. The flow is of
        * **Layout vs. Schematic (LVS) checks:** LVS confirms that the layout matches the intended schematic.  
   _Timing Verification_ - Static Timing Analysis (STA), Timing analysis tools are used to verify that all timing constraints, including setup and hold times, are met across the entire design. Any violations must be addressed before signoff.
   
-#### OpenLANE ASIC Flow #### 
+### <a name="2-3-openlane-asic-flow"></a>2.3 OpenLane ASIC flow ###
 
 **Various steps involve in OpenLANE ASIC Flow**  
 
@@ -164,8 +166,7 @@ These open-source tools, when used collectively, provide a complete and automate
 
 ![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/4eedeee2-d488-4ba5-afec-00378e90cfe3)
 
-<p align="center"> Flop ratio =  Number of flops/Total number of cells =  1596/10104 = 0.1579 = 15.79% </p>  
-
+<p align="center"> **Flop ratio =  Number of flops/Total number of cells =  1596/10104 = 0.1579 = 15.79%** </p>  
 
 
 

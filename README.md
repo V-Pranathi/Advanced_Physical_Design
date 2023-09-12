@@ -181,6 +181,7 @@ These open-source tools, when used collectively, provide a complete and automate
 ## <a name="3-day-2---good-floorplan-vs-bad-floorplan-and-introduction-to-library-cells"></a> 3.Day 2 - Good floorplan vs bad floorplan and introduction to library cells ##
 ### <a name="3-1-floor-planning-Considerations"></a> 3.1 Floor Planning Considerations ###
 #### <a name="3-1-1-utilization-factor-and-aspect-ratio"></a> 3.1.1 Utilization factor and aspect ratio ###  
+
 In the context of floor planning in the field of integrated circuit design and layout, two important factors to consider are the "utilization factor" and the "aspect ratio."
 
     Utilisation Factor =  Area occupied by netlist
@@ -194,7 +195,49 @@ In the context of floor planning in the field of integrated circuit design and l
 
 In practice, a utilization factor of 1 (100% utilization) is often unattainable due to various design considerations, including the need for buffer zones, routing channels, and other overhead. A utilization factor of 0.5 to 0.6 is much more typical and allows for these necessary design elements and potential future modifications. Regarding the aspect ratio, a value of 1 indicates a square-shaped chip, while any other value implies a rectangular shape. The choice of aspect ratio can depend on factors such as the chip's function, available package sizes, and manufacturing constraints.  
 
-#### <a name="3-1-2-pre-placed-cells"></a> 3.1.2 Pre-placed cells #### 
+#### <a name="3-1-2-pre-placed-cells"></a> 3.1.2 Pre-placed cells ####  
+
+Preplaced cells are fixed, predefined logic or functional blocks within an integrated circuit (IC) layout. They are positioned manually by design engineers at specific locations on the chip's layout canvas. Once placed, these cells maintain their fixed positions throughout subsequent stages of IC design, such as placement and routing. Preplaced cells typically contain complex logic or functional blocks that are critical to the chip's operation. These cells can include memory blocks, custom processors, analog circuitry, specialized accelerators, or other IP (Intellectual Property) components.  
+
+#### <a name="3-1-3-decoupling-capacitors"></a> 3.1.3 Decoupling capacitors ####  
+    
+* Decoupling capacitors, often of significant capacitance, are strategically placed in close proximity to the logic circuits.  
+* These capacitors are charged to the power supply voltage and serve as local energy reservoirs.  
+* Their primary role is to decouple the circuit from the power supply, ensuring that the circuit receives the necessary amount of current during transient events, such as switching       activities.  
+* Decaps help reduce crosstalk and electromagnetic interference (EMI) by stabilizing power supply voltages and minimizing voltage fluctuations caused by neighboring circuits.  
+
+#### <a name="3-1-4-power-planning"></a> 3.1.4 Power Planning ####
+
+* While pre-placed macros or cells can have dedicated decoupling capacitors for local power stability, it's not practical to provide each block or standard cell with its own decap.       Instead, a well-designed power planning strategy includes creating a power mesh to efficiently distribute power and ground (VDD and VSS) across the entire chip.  
+* Multiple GND and VDD points are strategically placed throughout the IC layout to ensure even power distribution. This even distribution reduces the likelihood of voltage drops and      improves the efficiency of power delivery across the chip.  
+
+#### <a name="3-1-5-pin-placement"></a> 3.1.5 Pin Placement ####
+
+Pin placement, also known as I/O (Input/Output) planning or pin assignment, is a critical aspect of integrated circuit (IC) design. It involves determining the locations and assignments of pins or external connections on the chip package. Proper pin placement is essential for functionality, manufacturability, and overall performance. By carefully arranging pins, signal strength can be preserved, preventing signal degradation and ensuring that data can be transmitted accurately. Thoughtful pin placement can assist in managing heat within the device. Ensuring that power and ground pins are strategically located can help dissipate heat effectively. Well-planned pin placement enhances the reliability of the electronic system by reducing the risk of signal issues, overheating, and manufacturing errors.  
+
+### <a name="3-2-performing-floor-planning-and-placement-in-openlane"></a> 3.2 Performing Floor Planning and Placement in OpenLane ###
+
+    run_floorplan
+
+![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/10af4ad1-c38d-42b1-b0cf-b8b6377d56b3)  
+
+Viewing the floorplan in magic:
+
+      $ cd /home/pranathi/OpenLane/designs/picorv32a/runs/RUN_2023.09.12_16.49.43/results/floorplan
+      magic -T ~/vsdstdcelldesign/libs/sky130A.tech lef read ../../tmp/merged.nom.lef def read picorv32.def &
+
+![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/9f94fafb-faad-4b3c-b7ce-8d0c11f375d1)
+
+Zooming in we can see various components:
+
+![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/caabe03d-aa92-4634-8135-ed025150fb79)
+
+
+
+
+
+
+
 
 
 

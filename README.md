@@ -234,20 +234,86 @@ Zooming in we can see various components:
 
     run_placement
     
-![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/dbf97265-5520-4e2a-88c8-831a52c1a923)
+![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/dbf97265-5520-4e2a-88c8-831a52c1a923)  
+
+Viewing the placement in magic:
 
      $ cd /home/pranathi/OpenLane/designs/picorv32a/runs/RUN_2023.09.16_04.23.58/results/placement
      magic -T ~/vsdstdcelldesign/libs/sky130A.tech lef read ../../tmp/merged.nom.lef def read picorv32.def &
 
 ![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/504614c8-3525-4b7e-b612-ff8d67ee93b3)  
 
-### <a name="3-3-cell-design-and-characterization-flows"></a> 3.3 Cell design and characterization flows ###
+### <a name="3-3-cell-design-and-characterization-flows"></a> 3.3 Cell design and characterization flows ###  
 
+Each cell that is placed on the layout is referred to as standard cell. Standard cells are pre-designed and pre-characterized logic gates, flip-flops, latches, and other digital components for which the definition is available in libraries.
 
+**Standard Cell Design Flow**
 
- 
+_Standard cell design flow involves the following:_
 
+  1. Inputs: PDKs, DRC & LVS rules, SPICE models, libraries, user-defined specifications
+  2. Design steps: Circuit design, Layout design (Art of layout Euler's path and stick diagram), Extraction of parasitics, Characterization (timing, noise, power)
+  3. Outputs: CDL (circuit description language), LEF, GDSII, extracted SPICE netlist (.cir), timing, noise and power .lib files
 
+**Standard Cell Characterization Flow**
+
+Characterization refers to the process of gathering and analyzing electrical and performance data for a specific cell or library element. The goal of characterization is to provide accurate and comprehensive information about how the cell behaves under various operating conditions. This information is essential for designing and optimizing digital circuits using these cells.
+
+_A typical standard cell characterization flow includes the following steps:_
+
+  1. Read in the models and tech files
+  2. Read extracted spice netlist
+  3. Recognise behaviour of the cell
+  4. Read the subcircuits
+  5. Attach power sources
+  6. Apply stimulus to characterization setup
+  7. Provide necessary output capacitance loads
+  8. Provide necessary simulation commands the opensource software called **GUNA** can be used for characterization. Steps 1-8 are fed into the GUNA software which generates timing, noise and power models.
+
+### <a name="3-4-general-timing-characterization-parameters"></a> 3.4 General timing characterization parameters ###
+
+_Timing threshold Definitions_
+
+| Timing defintion |	Value |
+| ---------------- | ----- |
+| slew_low_rise_thr |	20% value |
+| slew_high_rise_thr |	80% value |
+| slew_low_fall_thr |	20% value |
+| slew_high_fall_thr |	80% value |
+| in_rise_thr |	50% value |
+| in_fall_thr |	50% value |
+| out_rise_thr |	50% value |
+| out_fall_thr |	50% value |
+
+#### Propagation Delay and Transition time ####
+_Propagation Delay_
+
+Propagation delay refers to the time it takes for a change in an input signal to reach 50% of its final value to produce a corresponding change in the output signal to reach 50% of its final value of a digital circuit.  
+     
+    rise delay =  time(out_fall_thr) - time(in_rise_thr)
+
+_Transition time_
+
+Transition time refers to the time it takes for a digital signal to change its voltage level from one logic state (e.g., logic low or 0) to another logic state (e.g., logic high or 1) or vice versa. Transition time is typically measured as the time interval between the moment when the signal voltage reaches a specific percentage (e.g., 10% to 90% or 20% to 80%) of its final value during a voltage transition and the moment when it reaches the opposite percentage during the subsequent transition.  
+
+    Fall transition time: time(slew_high_fall_thr) - time(slew_low_fall_thr)
+    Rise transition time: time(slew_high_rise_thr) - time(slew_low_rise_thr)
+
+Day 3 - Design Library cell using Magic Layout and NG Spice Characterisation
+CMOS Inverter NG Spice simulations
+16-Mask CMOS Fabrication Process
+A 16-mask CMOS (Complementary Metal-Oxide-Semiconductor) process is a manufacturing process technology that involves the use of 16 different masks or layers during the fabrication of integrated circuits. These masks are used to define various features and components on the semiconductor wafer, such as transistors, interconnects, and other essential elements. The number of masks used in a CMOS process can vary depending on the specific technology and the complexity of the integrated circuits being produced. Below are steps involved in 16-Mask CMOS Process-
+SKY130 Tech File
+## <a name="references"></a> References ##
+
+* https://openlane.readthedocs.io/en/latest/
+* https://woset-workshop.github.io/PDFs/2020/a21.pdf
+* https://github.com/Devipriya1921/Physical_Design_Using_OpenLANE_Sky130#components-of-opensource-digital-asic-design
+* https://github.com/Rachana-Kaparthi/
+* https://github.com/aasthadave9/Advanced-Physical-Design-Using-OpenLANE-Sky130/
+* https://github.com/nickson-jose/vsdstdcelldesign/
+* http://opencircuitdesign.com/magic/
+* https://skywater-pdk.readthedocs.io/en/main/
 
 
 

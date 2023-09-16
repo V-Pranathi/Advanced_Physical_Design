@@ -480,7 +480,11 @@ The 16-mask CMOS process consists of the following steps:
 
 Using this transient response, we will now characterize the cell's slew rate and propagation delay:  
 
-* Rise Transition [output transition time from 20%(0.66V) to 80%(2.64V)]:
+* Rise Transition : 2.25421 - 2.18636 = 0.006785 ns/67.85ps  
+* Fall Transition : 4.09605 - 4.05554 = 0.04051ns/40.51ps  
+* Cell Rise Delay : 2.21701 - 2.14989 = 0.06689ns/66.89ps  
+* Cell Fall Delay : 4.07816 - 4.05011 = 0.02805ns/28.05ps
+
 
 
  

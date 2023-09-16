@@ -24,11 +24,11 @@ Advanced Physical Design using OpenLANE/Sky130
   * [5.1 Timing modelling using delay tables](#5-1-timing-modelling-using-delay-tables)
   * [5.2 Timing analysis with ideal clocks using openSTA](#5-2-timing-analysis-with-ideal-clocks-using-opensta)
   * [5.3 Clock tree synthesis TritonCTS and signal integrity](#5-3-clock-tree-synthesis-tritoncts-and-signal-integrity)
-  * [5.4 Timing analysis with real clocks using openSTA](#5-4-timing-analysis-with-real-clocks-using-opensta)
 * [6.Day 5 - Final steps for RTL2GDS using tritonRoute and openSTA](#6-day-5-final-steps-for-rtl2gds-using-tritonroute-and-opensta)
-  * [6.1 Routing and design rule check (DRC)](#6-2-routing-and-design-rule-check-(drc))
+  * [6.1 Routing and design rule check (DRC)](#6-2-routing-and-design-rule-check--drc-)
   * [6.2 Power Distribution Network and routing](#6-2-power-distribution-network-and-routing)
   * [6.3 TritonRoute Features](#6-3-tritonroute-features)
+* [References](#references)
 
 ## <a name="1-introduction"></a> 1.Introduction ##  
 Electronic Design Automation (EDA) tools are essential for designing and simulating electronic circuits and systems. There are several open-source EDA tools available that provide various functionalities for electronic design.   
@@ -755,7 +755,94 @@ Setup slack:
 
 ![266975445-59a9cdcd-3176-4cef-852d-8359d3f4b3d2](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/471b8843-75e2-43d9-800b-ddc999a13f9e)
 
+## <a name="6-day-5-final-steps-for-rtl2gds-using-tritonroute-and-opensta"></a> 6.Day 5 - Final steps for RTL2GDS using tritonRoute and openSTA ##
+### <a name="6-2-routing-and-design-rule-check--drc-"></a> 6.1 Routing and design rule check (DRC) ##  
 
+**Maze Routing:**
+
+One simple routing algorithm is Maze Routing or Lee's routing:  
+
+The shortest path is one that follows a steady increment of one (1-to-9 on the example below). There might be multiple path like this but the best path that the tool will choose is one with less bends. The route should not be diagonal and must not overlap an obstruction such as macros.  
+This algorithm however has high run time and consume a lot of memory thus more optimized routing algorithm is preferred (but the principles stays the same where route with shortest path and less bends is preferred).  
+
+![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/cc184825-0192-41d1-b838-12b2b97c8359)
+
+**Design rule check**  
+
+DRC cleaning is the next step after routing. DRC cleaning is done to ensure the routes can be fabricated and printed in silicon faithfully. Most DRC is due to the constraints of the photolitographic machine for chip fabrication where the wavelength of light used is limited. There are thousands of DRC and some DRC are:
+1. Minimum wire width  
+2. Minimum wire pitch (center to center spacing)  
+3. Minimum wire spacing (edge to edge spacing)  
+4. Signal short = this can be solved my moving the route to next layer using vias. This results in more DRC (Via width, Via Spacing, etc.). Higher metal layer must be wider than lower metal layer and this is another DRC.
+
+![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/af2d5502-6486-4cc2-9bb3-ec7687875749)
+
+### <a name="6-2-power-distribution-network-and-routing"></a> 6.2 Power Distribution Network and routing ###
+
+Unlike the general ASIC flow, Power Distribution Network generation is not a part of floorplan run in OpenLANE. PDN must be generated after CTS and post-CTS STA analyses:  
+
+we can check whether PDN has been created or no by check the current def environment variable:  echo $::env(CURRENT_DEF)  
+
+	gen_pdn
+
+![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/e6c4524a-3016-47e8-9a6a-3d7e6a1ce813)
+
+![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/a4e3ac38-8e9e-4703-9a39-7e1c6cc79ffb)
+
+* Once the command is given, power distribution netwrok is generated.  
+* The power distribution network has to take the design_cts.def as the input def file.  
+* Power rings,strapes and rails are created by PDN.  
+* From VDD and VSS pads, power is drawn to power rings.  
+* Next, the horizontal and vertical strapes connected to rings draw the power from strapes.   
+* Stapes are connected to rings and these rings are connected to std cells. So, standard cells get power from rails.  
+* The standard cells are designed such that it's height is multiples of the vertical tracks /track pitch.Here, the pitch is 2.72. Only if the above conditions are adhered it is possible to power the standard cells.  
+* There are definitions for the straps and the rails. In this design, straps are at metal layer 4 and 5 and the standard cell rails are at the metal layer 1. Vias connect accross the layers as required.
+
+  ![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/9eaa2a81-8fcf-4758-a6bb-c9f63e32ed0f)
+
+### <a name="6-3-tritonroute-features"></a>6.3 TritonRoute Features
+
+* Performs detailed routing and honors the pre-processed route guides (made by global route) and uses MILP based (Mixed Integer Linear Programming algorithm) panel routing scheme(uses panel as the grid guide for routing) with intra-layer parallel routing (routing happens simultaneously in a single layer) and inter-layer sequential layer (routing starts from bottom metal layer to top metal layer sequentially and not simultaneously).  
+* Honors preferred direction of a layer. Metal layer direction is alternating (metal layer direction is specified in the LEF file e.g. met1 Horizontal, met2 Vertical, etc.) to reduce overlapping wires between layer and reduce potential capacitance which can degrade the signal.  
+
+![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/5918f66e-c59b-447c-ac4c-a467a25254bd) 
+
+In summary, TritonRoute is a sophisticated tool that not only performs initial detail routing but also places a strong emphasis on optimizing routing within pre-processed route guides by breaking down, merging, and bridging them as needed to achieve efficient and effective routing results.  
+
+![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/258b389d-d9b9-4b91-a19f-12c21d76dc73)
+
+![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/793c0e55-ec32-4fb9-97c4-fd97f9e7293b)
+
+**TritonRoute**
+
+We will now finally do the routing, simply run run_routing. This will do both global and detailed routing, this will take multiple optimization iterations until the DRC violation is reduced to zero. The zeroth iteration has 27426 violations and only at the 8th iteration was all violations solved. The whole routing took 1 hour and 10 mins in my Linux machine with 2 cores. A fun fact: the die area is just 584um by 595um but the total wirelength used for routing spans to 0.5m!!!  
+
+	run_routing
+
+For the default setting picorv32a takes approximately 30 minutes according to the current version of TritonRoute.  
+
+![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/32d329db-9580-4b43-a7a3-ea227a4710e7)
+
+Here drc violation is zero:
+
+![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/ac927841-7a0b-41ae-8a62-081b4360c3ec)
+
+
+ **Layout in magic tool post routing:**  
+
+ The design can be viewed on magic within results/routing directory. Run the following command in that directory:  
+
+	 magic -T /home/pranathi/OpenLane/vsdstdcelldesign/libs/sky130A.tech lef read tmp/merged.nom.lef def read results/routing/picorv32a.def & 
+
+![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/1d19fd84-8dfa-4e0c-85bf-1663ba609d8d)
+
+**Area using box command**
+
+![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/3bddf156-2741-4d62-8617-889a9e1a3e0a)
+
+**slack report post routing:**
+
+![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/c2a90041-f993-4298-9bb5-eead8737d5cb)
 
 ## <a name="references"></a> References ##
 

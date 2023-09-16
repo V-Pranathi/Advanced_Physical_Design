@@ -463,8 +463,6 @@ The 16-mask CMOS process consists of the following steps:
  
   
 
-
-
 ## <a name="references"></a> References ##
 
 * https://openlane.readthedocs.io/en/latest/

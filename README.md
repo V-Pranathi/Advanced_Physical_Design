@@ -452,16 +452,38 @@ The 16-mask CMOS process consists of the following steps:
 * **Third Metal Layer Mask (Mask 13):** This mask defines the third layer of metal interconnects, which can connect to the lower metal layers through vias.  
 * **Passivation Layer Mask (Mask 14):** This mask defines the protective passivation layer that covers the entire chip, protecting it from external factors and contamination.  
 * **Bond Pad Mask (Mask 15):** This mask defines the locations of bond pads, which are used for external electrical connections and testing.  
-* **Test Structure Mask (Mask 16):** This mask includes various test structures used for quality control, testing, and characterization during manufacturing.  
+* **Test Structure Mask (Mask 16):** This mask includes various test structures used for quality control, testing, and characterization during manufacturing.   
 
 ##### Basic layers layout and LEF using inverter #####
 
-* From Layout, we see the layers which are required for CMOS inverter. Inverter is, PMOS and NMOS connected together.
-* Gates of both PMOS and NMOS are connected together and fed to input(here ,A), NMOS source connected to ground(here, VGND), PMOS source is connected to VDD(here, VPWR), Drains of PMOS and NMOS are connected together and fed to output(here, Y). The First layer in skywater130 is localinterconnect layer(locali) , above that metal 1 is purple color and metal 2 is pink color. If you want to see connections between two different parts, place the cursor over that area and press S one times. The tkson window gives the component name.
+* From Layout, we see the layers which are required for CMOS inverter. Inverter is, PMOS and NMOS connected together.  
+* Gates of both PMOS and NMOS are connected together and fed to input(here ,A), NMOS source connected to ground(here, VGND), PMOS source is connected to VDD(here, VPWR), Drains of PMOS and NMOS are connected together and fed to output(here, Y). The First layer in skywater130 is localinterconnect layer(locali) , above that metal 1 is purple color and metal 2 is pink color. If you want to see connections between two different parts, place the cursor over that area and press S one times. The tkson window gives the component name.  
 
  ![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/69619408-1460-4e91-9d3d-b0bde28a9e1d)
  
-  
+ ### <a name="4-3-sky130-tech-file-labs"></a> 4.3 Sky130 Tech File Labs ###  
+
+ Spice Extraction : Use the below commands in tkcon to achieve .mag to .spice extraction:  
+ 
+* Make an extract file .ext by typing _extract all_ in the tkon terminal.  
+* Extract the .spice file from this ext file by typing _ext2spice cthresh 0 rthresh 0_then _ext2spice_ in the tcon terminal.  
+
+ ![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/e4fdf4c4-e4e2-4db0-97ff-00a216afad25) 
+
+ ![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/c1b0e441-cb77-4ab9-85f0-fee96c876e87)
+
+ We then modify the spice file to be able to plot a transient response:  
+
+ ![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/1d3e3663-cbab-42c8-a4b6-42910a9de090)
+
+ ![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/1f34c343-ec28-4138-bebd-bc1036c3687e)
+
+Using this transient response, we will now characterize the cell's slew rate and propagation delay:  
+
+* Rise Transition [output transition time from 20%(0.66V) to 80%(2.64V)]:
+
+
+ 
 
 ## <a name="references"></a> References ##
 

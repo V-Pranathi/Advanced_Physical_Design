@@ -538,8 +538,108 @@ Accessing the tracks.info file for the pitch and direction information:
 
 1. Use grid command inside the tkon terminal to match the tracks informations:
 
+![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/ddbcf2ea-93f4-4ce9-884e-6210f0df5412)
 
- 
+The grids show where the routing for the local-interconnet layer can only happen, the distance of the grid lines are the required pitch of the wire. Below, we can see that the guidelines are satisfied:  
+
+2. Next, we will extract the LEF file. The LEF file contains the cell size, port definitions, and properties which aid the placer and router tool. With that, the ports definition, port class, and port use must be set first.
+
+ The way to define a port is through Magic console and following are the steps:
+
+* In Magic Layout window, first source the .mag file for the design (here inverter). Then Edit >> Text which opens up a dialogue box.
+* When you double press S at the I/O lables, the text automatically takes the string name and size. Ensure the Port enable checkbox is checked and default checkbox is unchecked as shown in the figure:
+
+![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/8a9ad175-4299-41cd-acf6-d83427c053c6)
+
+* In the above figure, The number in the textarea near enable checkbox defines the order in which the ports will be written in LEF file (0 being the first).   
+* For power and ground layers, the definition could be same or different than the signal layer. Here, ground and power connectivity are taken from metal1.  
+
+**Set port class and port use attributes for layout**  
+After defining ports, the next step is setting port class and port use attributes.  
+
+Select port A in magic:  
+
+	port class input
+        port use signal
+Select Y area
+
+	port class output
+	port use signal
+
+Select VPWR area
+
+	port class inout
+	port use power
+
+Select VGND area
+
+	port class inout
+	port use ground
+LEF extraction can be carried out in tkcon as follows:
+
+	lef write
+
+This generates sky130_vsdinv.lef file.
+
+##### Steps to include custom cell in ASIC design #####
+We have created a custom standard cell in previous steps of an inverter. Copy lef file, sky130_fd_sc_hd_typical.lib, sky130_fd_sc_hd_slow.lib & sky130_fd_sc_hd_fast.lib to src folder of picorv32a from libs folder vsdstdcelldesign. Then modify the config.tcl as follows.
+
+	
+	{
+    "DESIGN_NAME": "picorv32",
+    "VERILOG_FILES": "dir::src/picorv32a.v",
+    "CLOCK_PORT": "clk",
+    "CLOCK_NET": "clk",
+    "GLB_RESIZER_TIMING_OPTIMIZATIONS": true,
+    "RUN_HEURISTIC_DIODE_INSERTION": true,
+    "DIODE_ON_PORTS": "in",
+    "GPL_CELL_PADDING": 2,
+    "DPL_CELL_PADDING": 2,
+    "CLOCK_PERIOD": 24,
+    "FP_CORE_UTIL": 35,
+    "PL_RANDOM_GLB_PLACEMENT": 1,
+    "PL_TARGET_DENSITY": 0.5,
+    "FP_SIZING": "relative",
+    "LIB_SYNTH":"dir::src/sky130_fd_sc_hd__typical.lib",
+    "LIB_FASTEST":"dir::src/sky130_fd_sc_hd__fast.lib",
+    "LIB_SLOWEST":"dir::src/sky130_fd_sc_hd__slow.lib",
+    "LIB_TYPICAL":"dir::src/sky130_fd_sc_hd__typical.lib",
+    "TEST_EXTERNAL_GLOB":"dir::/src/*",
+    "SYNTH_DRIVING_CELL":"sky130_vsdinv",
+    "MAX_FANOUT_CONSTRAINT": 4,
+    "pdk::sky130*": {
+        "MAX_FANOUT_CONSTRAINT": 6,
+        "scl::sky130_fd_sc_ms": {
+            "FP_CORE_UTIL": 30
+        }
+        }
+	}
+
+Now, run OpenLane using the following commands:
+
+	prep -design picorv32a
+	set lefs [glob $::env(DESIGN_DIR)/src/*.lef]
+	add_lefs -src $lefs
+	run_synthesis
+
+![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/f73c7a30-6fe0-426e-9266-a6d7c8be629d)
+
+STA Report:
+
+![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/bbaa9660-72c1-4726-b3b4-227f2a3ffebf)
+
+##### Delay Tables #####
+
+
+
+
+
+
+
+
+
+
+
 
 ## <a name="references"></a> References ##
 

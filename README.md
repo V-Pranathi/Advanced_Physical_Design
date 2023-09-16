@@ -232,7 +232,20 @@ Zooming in we can see various components:
 
 ![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/caabe03d-aa92-4634-8135-ed025150fb79)
 
+    run_placement
+    
+![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/dbf97265-5520-4e2a-88c8-831a52c1a923)
 
+     $ cd /home/pranathi/OpenLane/designs/picorv32a/runs/RUN_2023.09.16_04.23.58/results/placement
+     magic -T ~/vsdstdcelldesign/libs/sky130A.tech lef read ../../tmp/merged.nom.lef def read picorv32.def &
+
+![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/504614c8-3525-4b7e-b612-ff8d67ee93b3)  
+
+### <a name="3-3-cell-design-and-characterization-flows"></a> 3.3 Cell design and characterization flows ###
+
+
+
+ 
 
 
 

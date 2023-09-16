@@ -21,7 +21,14 @@ Advanced Physical Design using OpenLANE/Sky130
   * [4.2 Inception of Layout CMOS fabrication process](#4-2-inception-of-layout-cmos-fabrication-process)
   * [4.3 Sky130 Tech File Labs](#4-3-sky130-tech-file-labs)
 * [5.Day 4 - Pre-layout timing analysis and importance of good clock tree](#5-day-4-pre-layout-timing-analysis-and-importance-of-good-clock-tree)
-  * 
+  * [5.1 Timing modelling using delay tables](#5-1-timing-modelling-using-delay-tables)
+  * [5.2 Timing analysis with ideal clocks using openSTA](#5-2-timing-analysis-with-ideal-clocks-using-opensta)
+  * [5.3 Clock tree synthesis TritonCTS and signal integrity](#5-3-clock-tree-synthesis-tritoncts-and-signal-integrity)
+  * [5.4 Timing analysis with real clocks using openSTA](#5-4-timing-analysis-with-real-clocks-using-opensta)
+* [6.Day 5 - Final steps for RTL2GDS using tritonRoute and openSTA](#6-day-5-final-steps-for-rtl2gds-using-tritonroute-and-opensta)
+  * [6.1 Routing and design rule check (DRC)](#6-2-routing-and-design-rule-check-(drc))
+  * [6.2 Power Distribution Network and routing](#6-2-power-distribution-network-and-routing)
+  * [6.3 TritonRoute Features](#6-3-tritonroute-features)
 
 ## <a name="1-introduction"></a> 1.Introduction ##  
 Electronic Design Automation (EDA) tools are essential for designing and simulating electronic circuits and systems. There are several open-source EDA tools available that provide various functionalities for electronic design.   

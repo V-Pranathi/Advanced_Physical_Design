@@ -519,10 +519,24 @@ Changes to be made are:
 
 ![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/ad50293d-f13b-4fd0-8b32-91e3a09e803d)
 
+## <a name="5-day-4-pre-layout-timing-analysis-and-importance-of-good-clock-tree"></a> 5.Day 4 - Pre-layout timing analysis and importance of good clock tree ## 
+### <a name="5-1-timing-modelling-using-delay-tables"></a> 5.1 Timing modelling using delay tables ### 
+**Extracting the LEF file**
 
+PnR tool does not need all informations from the .mag file like the logic part but only PnR boundaries, power/ground ports, and input/output ports. This is what a LEF file actually contains. So the next step is to extract the LEF file from Magic. But first, we need to follow guidelines of the PnR tool for the standard cells:  
+* The input and output ports lies on the intersection of the horizontal and vertical tracks (ensure the routes can reach that ports).
+* The width of the standard cell must be odd multiple of the tracks horizontal pitch and height must be odd multiples of tracks vertical pitch.  
 
+To check these guidelines, we need to change the grid of Magic to match the actual metal tracks. The pdks/sky130A/libs.tech/openlane/sky130_fd_sc_hd/tracks.info contains those metal informations.  
 
+	cd /home/pranathi/.volare/volare/sky130/versions/78b7bc32ddb4b6f14f76883c2e2dc5b5de9d1cbc/sky130A/libs.tech/openlane/sky130_fd_sc_hd
+        gedit tracks.info
 
+Accessing the tracks.info file for the pitch and direction information:
+
+![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/bbf84766-0ce8-4053-b307-6cdcd15efcbf)
+
+1. Use grid command inside the tkon terminal to match the tracks informations:
 
 
  

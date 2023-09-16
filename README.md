@@ -16,6 +16,12 @@ Advanced Physical Design using OpenLANE/Sky130
   * [3.2 Performing Floor Planning and Placement in OpenLane](#3-2-performing-floor-planning-and-placement-in-openlane)
   * [3.3 Cell design and characterization flows](#3-3-cell-design-and-characterization-flows)
   * [3.4 General timing characterization parameters](#3-4-general-timing-characterization-parameters)
+* [4.Day 3 - Design library cell using Magic Layout and ngspice characterization](#4-day-3---design-library-cell-using-magic-layout-and-ngspice-characterization)
+  * [4.1 Labs for CMOS inverter ngspice simulations](#4-1-labs-for-cmos-inverter-ngspice-simulations)
+  * [4.2 Inception of Layout CMOS fabrication process](#4-2-inception-of-layout-cmos-fabrication-process)
+  * [4.3 Sky130 Tech File Labs](#4-3-sky130-tech-file-labs)
+* [5.Day 4 - Pre-layout timing analysis and importance of good clock tree](#5-day-4-pre-layout-timing-analysis-and-importance-of-good-clock-tree)
+  * 
 
 ## <a name="1-introduction"></a> 1.Introduction ##  
 Electronic Design Automation (EDA) tools are essential for designing and simulating electronic circuits and systems. There are several open-source EDA tools available that provide various functionalities for electronic design.   
@@ -299,11 +305,7 @@ Transition time refers to the time it takes for a digital signal to change its v
     Fall transition time: time(slew_high_fall_thr) - time(slew_low_fall_thr)
     Rise transition time: time(slew_high_rise_thr) - time(slew_low_rise_thr)
 
-Day 3 - Design Library cell using Magic Layout and NG Spice Characterisation
-CMOS Inverter NG Spice simulations
-16-Mask CMOS Fabrication Process
-A 16-mask CMOS (Complementary Metal-Oxide-Semiconductor) process is a manufacturing process technology that involves the use of 16 different masks or layers during the fabrication of integrated circuits. These masks are used to define various features and components on the semiconductor wafer, such as transistors, interconnects, and other essential elements. The number of masks used in a CMOS process can vary depending on the specific technology and the complexity of the integrated circuits being produced. Below are steps involved in 16-Mask CMOS Process-
-SKY130 Tech File
+
 ## <a name="references"></a> References ##
 
 * https://openlane.readthedocs.io/en/latest/

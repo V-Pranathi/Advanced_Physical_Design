@@ -485,6 +485,44 @@ Using this transient response, we will now characterize the cell's slew rate and
 * Cell Rise Delay : 2.21701 - 2.14989 = 0.06689ns/66.89ps  
 * Cell Fall Delay : 4.07816 - 4.05011 = 0.02805ns/28.05ps
 
+##### Magic Tool options and DRC Rules #####
+The technology file is a setup file that declares layer types, colors, patterns, electrical connectivity, DRC, device extraction rules and rules to read LEF and DEF files. Magic layouts can be sourced from opencircuitdesign.com using the command:  
+ 
+    wget http://opencircuitdesign.com/open_pdks/archive/drc_tests.tgz
+    tar xfz drc_tests.tgz
+
+once extraction is done, drc_tests file is created and you will have all the information about magic layout for this lab exercise. The _.magicrc_ loads locally the tech file required by the user. Since this file sets up the tech file, sky130.tech need not be mentioned in the command used to invoke Magic. Hence Magic can be invoked more conveniently:
+
+     magic -d XR
+
+![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/e0b9634e-ed2f-4fa1-b3c1-5fd2f028077d)
+
+First load the poly file by _load poly.mag_ on tkcon window.
+
+Finding the error by mouse cursor and find the box area, Poly.9 is violated due to spacing between polyres and poly.
+
+First load the poly file by load poly.mag on tkcon window.
+
+![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/dff048a8-b1fa-451c-ade9-31c05f581ee1)
+
+We find that distance between regular polysilicon & poly resistor should be 22um but it is showing 17um and still no errors . We should go to _sky130A.tech_ file and modify as follows to detect this error.  
+
+![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/eebb5ad6-72b2-4b2a-9450-ef64409f4e19)
+
+Changes to be made are:
+
+        spacing npres allpolynonres 480 touching_illegal \
+	       "poly.resistor spacing to N-tap < %d (poly.9)"
+
+        spacing xhrpoly,uhrpoly,xpc allpolynonres 480 touching_illegal \
+	       "xhrpoly/uhrpoly resistor spacing to diffusion < %d (poly.9)"
+
+![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/ad50293d-f13b-4fd0-8b32-91e3a09e803d)
+
+
+
+
+
 
 
  

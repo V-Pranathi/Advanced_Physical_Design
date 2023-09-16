@@ -400,6 +400,68 @@ Ampersand at the end makes the next prompt line free, otherwise magic keeps the 
 ![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/483e1de1-481c-4379-b981-b02356102c91)
 
 ### <a name="4-2-inception-of-layout-cmos-fabrication-process"></a> 4.2 Inception of Layout CMOS fabrication process ###  
+#### 16 Mask CMOS Fabrication ####
+The 16-mask CMOS process consists of the following steps:
+
+1. _Selection of subtrate:_ Secting the body/substrate material.
+
+![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/745d9f5f-6cd3-46bb-966a-8f96b24ab116)
+
+2. _Creating active region for transistors:_ Isolation between active region pockets by SiO2 and Si3N4 deposition followed by photolithography and etching.
+
+![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/9e88b152-8ad7-4c8a-a5d8-8cb6cf1d4e72)
+
+  
+3. _N-well and P-well formation:_ Ion implanation by Boron for P-well and by Phosphorous for N-well formation.
+
+![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/95fec549-d976-4193-a2c8-35def255a559)
+
+4. _Formation of gate terminal:_ NMOS and PMOS gates formed by photolithography techniques.
+
+![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/35834db4-2557-44f1-8080-24e0dfadf9f5)
+
+5. _LDD (lightly doped drain) formation:_ LDD formed to prevent hot electron effect.
+
+  ![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/3c4e17af-daba-4488-8e0f-df1b4fbb028b)
+
+6. _Source & drain formation:_Screen oxide added to avoid channelling during implants followed by Aresenic implantation and annealing.
+
+![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/452abb4e-44bd-4a83-8b8f-cdea1584f441)
+
+7. _Local interconnect formation:_ Removal of screen oxide by HF etching. Deposition of Ti for low resistant contacts.
+
+![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/d5580a95-d9a2-470f-9555-3a989d031858)
+
+8. _Higher level metal formation:_ CMP for planarization followed by TiN and Tungsten deposition. Top SiN layer for chip protection.
+
+![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/1074b65d-7961-4bf5-8199-e05f345ea0b5)
+
+##### The 16 masks used in the above process are: #####
+
+* **Substrate Mask (Mask 1):** This mask defines the active regions on the silicon wafer where transistors and other devices will be formed. It specifies the boundaries of the N-well and P-well regions.  
+* **Threshold Voltage Adjustment Mask (Mask 2):** This mask adjusts the threshold voltage of the transistors by defining the regions where threshold voltage implants are required.  
+* **Gate Oxide Mask (Mask 3):** This mask defines the areas where gate oxide will be grown or deposited. The gate oxide acts as an insulator between the gate electrode and the silicon substrate.  
+* **Poly-Silicon Gate Mask (Mask 4):** This mask defines the gate electrodes for both N-channel and P-channel transistors. It outlines the shape of the gates.  
+* **N+ and P+ Diffusion Masks (Masks 5 and 6):** These masks define the source and drain regions for the N-channel and P-channel transistors, respectively. These regions are typically doped with impurities to create the necessary electrical characteristics.  
+* **Contact Mask (Mask 7):** This mask defines the openings for contacts, which allow the metal layers to connect to the underlying silicon.  
+* **First Metal Layer Mask (Mask 8):** This mask defines the first layer of metal interconnects that connect various components on the chip, such as transistors and contacts.  
+* **Interlayer Dielectric (ILD) Mask (Mask 9):** This mask defines the dielectric material that insulates metal layers from each other. It also specifies the locations of vias for vertical connections.  
+* **Via Mask (Mask 10):** This mask defines the openings in the ILD layer for vias, which enable vertical connections between metal layers.  
+* **Second Metal Layer Mask (Mask 11):** This mask defines the second layer of metal interconnects, which connect to the underlying metal layer and vias.  
+* **Barrier Layer Mask (Mask 12):** This mask defines layers used to improve adhesion between metal and dielectric, enhancing the reliability of the interconnects.  
+* **Third Metal Layer Mask (Mask 13):** This mask defines the third layer of metal interconnects, which can connect to the lower metal layers through vias.  
+* **Passivation Layer Mask (Mask 14):** This mask defines the protective passivation layer that covers the entire chip, protecting it from external factors and contamination.  
+* **Bond Pad Mask (Mask 15):** This mask defines the locations of bond pads, which are used for external electrical connections and testing.  
+* **Test Structure Mask (Mask 16):** This mask includes various test structures used for quality control, testing, and characterization during manufacturing.  
+
+##### Basic layers layout and LEF using inverter #####
+
+* From Layout, we see the layers which are required for CMOS inverter. Inverter is, PMOS and NMOS connected together.
+* Gates of both PMOS and NMOS are connected together and fed to input(here ,A), NMOS source connected to ground(here, VGND), PMOS source is connected to VDD(here, VPWR), Drains of PMOS and NMOS are connected together and fed to output(here, Y). The First layer in skywater130 is localinterconnect layer(locali) , above that metal 1 is purple color and metal 2 is pink color. If you want to see connections between two different parts, place the cursor over that area and press S one times. The tkson window gives the component name.
+
+ ![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/69619408-1460-4e91-9d3d-b0bde28a9e1d)
+ 
+  
 
 
 

@@ -834,7 +834,7 @@ Here drc violation is zero:
 
 	 magic -T /home/pranathi/OpenLane/vsdstdcelldesign/libs/sky130A.tech lef read tmp/merged.nom.lef def read results/routing/picorv32a.def & 
 
-![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/1d19fd84-8dfa-4e0c-85bf-1663ba609d8d)
+![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/f1abd992-6b4e-41ac-af60-579101c88db6)
 
 **Area using box command**
 

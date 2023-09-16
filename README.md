@@ -17,7 +17,7 @@ Advanced Physical Design using OpenLANE/Sky130
   * [3.3 Cell design and characterization flows](#3-3-cell-design-and-characterization-flows)
   * [3.4 General timing characterization parameters](#3-4-general-timing-characterization-parameters)
 * [4.Day 3 - Design library cell using Magic Layout and ngspice characterization](#4-day-3---design-library-cell-using-magic-layout-and-ngspice-characterization)
-  * [4.1 Labs for CMOS inverter ngspice simulations](#4-1-labs-for-cmos-inverter-ngspice-simulations)
+  * [4.1 CMOS inverter ngspice simulations](#4-1-cmos-inverter-ngspice-simulations)
   * [4.2 Inception of Layout CMOS fabrication process](#4-2-inception-of-layout-cmos-fabrication-process)
   * [4.3 Sky130 Tech File Labs](#4-3-sky130-tech-file-labs)
 * [5.Day 4 - Pre-layout timing analysis and importance of good clock tree](#5-day-4-pre-layout-timing-analysis-and-importance-of-good-clock-tree)
@@ -311,6 +311,96 @@ Transition time refers to the time it takes for a digital signal to change its v
 
     Fall transition time: time(slew_high_fall_thr) - time(slew_low_fall_thr)
     Rise transition time: time(slew_high_rise_thr) - time(slew_low_rise_thr)
+
+## <a name="4-day-3---design-library-cell-using-magic-layout-and-ngspice-characterization"></a> 4.Day 3 - Design library cell using Magic Layout and ngspice characterization ##
+### <a name="4-1-cmos-inverter-ngspice-simulations"></a> 4.1 CMOS inverter ngspice simulations ###
+**SPICE Deck creation and simulation for CMOS Inverter**:
+
+1. SPICE deck = component connectivity (basically a netlist) of the CMOS inverter.  
+2. SPICE deck values = value for W/L (0.375u/0.25u means width is 375nm and lengthis 250nm). PMOS should be wider in width(2x or 3x) than NMOS. The gate and supply voltages are normally a multiple of length (in the example, gate voltage can be 2.5V)  
+3. Add nodes to surround each component and name it. This will be used in SPICE to identify a component.  
+
+_Notes:_
+* Width is the length of source and drain. Length is the distance between source and drain.  
+* PMOS hole carrier is slower than NMOS electron carrier mobility, so to match the rise and fall time PMOS must be thicker (less resistance thus higher mobility) than NMOS.
+
+**SPICE Deck netlsit description**
+
+   ![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/ae6df423-467a-40a1-9f20-097819461902)
+
+    ***syntax for PMOS and NMOS desription***
+    [component name] [drain] [gate] [source] [substrate] [transistor type] W=[width] L=[length]
+
+     ***simulation commands***
+    .op --- is the start of SPICE simulation operation where Vin will be sweep from 0 to 2.5 with 0.5 steps
+    tsmc_025um_model.mod  ----  model file containing the technological parameters for the 0.25um NMOS and PMOS 
+
+The steps to simulate in SPICE:
+
+    source [filename].cir
+    run
+    setplot 
+    dc1 
+    plot out vs in 
+
+![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/705aa94d-4ffc-4bc9-86a7-2de65c0d2fd0)
+
+**Switching Threshold Vm**
+_CMOS robustness depends on:_
+
+1. Switching threshold = Vin is equal to Vout. This the point where both PMOS and NMOS is in saturation or kind of turned on, and leakage current is high. If PMOS is thicker than NMOS, the CMOS will have higher switching threshold (1.2V vs 1V) while threshold will be lower when NMOS becomes thicker.  
+2. At this point, both the transistors are in saturation region, means both are turned on and have high chances of current flowing driectly from VDD to Ground called Leakage current.
+
+DC transfer analysis is used for finding switching threshold. SPICE DC analysis below uses DC input of 2.5V. Simulation operation is DC sweep from 0V to 2.5V by 0.05V steps:  
+
+    Vin in 0 2.5
+    *** Simulation Command ***
+    .op
+    .dc Vin 0 2.5 0.05
+
+Below is the result of SPICE simulation for DC analysis, the line intersection is the switching threshold:  
+
+![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/889560e3-a02b-47f4-99a4-ffeb6930a93c)
+
+Meanwhile, transient analysis is used for finding propagation delay. SPICE transient analysis uses pulse input:
+
+   1. starts at 0V
+   2. ends at 2.5V
+   3. starts at time 0
+   4. rise time of 10ps
+   5. fall time of 10ps
+   6. pulse-width of 1ns
+   7. period of 2ns
+
+      ![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/bbf732fe-607c-46f9-a927-9a5d0f839ef8)
+
+The simulation operation has 10ps step and ends at 4ns:
+
+    Vin in 0 0 pulse 0 2.5 0 10p 10p 1n 2n 
+    *** Simulation Command ***
+    .op
+    .tran 10p 4n
+
+Below is the result of SPICE simulation for transient analysis:
+
+![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/f6ed8ea7-243e-445f-b476-1995afd7f808)
+
+#### Lab steps to gitclone vsdstdcelldesign ####
+The Magic layout of a CMOS inverter will be used so as to intergate the inverter with the picorv32a design. To do this, inverter magic file is sourced from vsdstdcelldesign by cloning it within the home/OpenLane directory as follows:  
+
+    git clone https://github.com/nickson-jose/vsdstdcelldesign
+
+This creates a vsdstdcelldesign named folder in the openlane directory.  
+Now, we can view the layout of inverter in magic using the below command:  
+
+    magic -T libs/sky130A.tech sky130_inv.mag &
+
+Ampersand at the end makes the next prompt line free, otherwise magic keeps the prompt line busy. Once we run the magic command we get the layout of the inverter in the magic window. The layout shown in magic is as below:
+
+![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/483e1de1-481c-4379-b981-b02356102c91)
+
+### <a name="4-2-inception-of-layout-cmos-fabrication-process"></a> 4.2 Inception of Layout CMOS fabrication process ###  
+
 
 
 ## <a name="references"></a> References ##

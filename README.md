@@ -630,14 +630,130 @@ STA Report:
 
 ##### Delay Tables #####
 
+In order to avoid large skew between endpoints of a clock tree (signal arrives at different point in time):  
 
+* Buffers on the same level must have same capacitive load to ensure same timing delay or latency on the same level.  
+* Buffers on the same level must also be the same size (different buffer sizes -> different W/L ratio -> different resistance -> different RC constant -> different delay).
 
+![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/28968aa5-9ed4-4105-9908-3bf841e37344)
 
+Buffers on different level will have different capacitive load and buffer size but as long as they are the same load and size on the same level, the total delay for each clock tree path will be the same thus skew will remain zero. This means different levels will have varying input transition and output capacitive load and thus varying delay.  
 
+Delay tables are used to capture the timing model of each cell and is included inside the liberty file. The main factor in delay is the output slew. The output slew in turn depends on capacitive load and input slew. The input slew is a function of previous buffer's output cap load and input slew and it also has its own transition delay table.  
 
+![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/6cfe584e-120b-41b6-927e-845df6434236)
 
+Notice how skew is zero since delay for both clock path is x9'+y15.  
 
+**Openlane steps with custom standard cell**  
+We perform synthesis and found that it has positive slack and met timing constraints. During Floorplan,504 endcaps, 6731 tapcells got placed. Design has 275 original rows.  
+Now  _run_placement_
+After placement, we check for legality &To check the layout invoke magic from the results/placement directory:
 
+	magic -T /home/pranathi/OpenLane/vsdstdcelldesign/libs/sky130A.tech lef read tmp/merged.nom.lef def read results/floorplan/picorv32a.def &
+
+![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/d9d0ade6-fa1d-4a03-b778-86b0901f4420)
+
+### <a name="5-2-timing-analysis-with-ideal-clocks-using-opensta"></a> 5.2 Timing analysis with ideal clocks using openSTA ###
+
+Pre-layout STA will not yet include effects of clock buffers and net-delay due to RC parasitics (wire delay will be derived from PDK library wire model).  
+
+![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/2a7dc485-c80c-4f92-9215-0a09038bd104)
+
+Setup timing analysis equation is:
+
+	Setup timing analysis equation is:
+
+* Θ = Combinational delay which includes clk to Q delay of launch flop and internal propagation delay of all gates between launch and capture flop  
+* T = Time period, also called the required time  
+* S = Setup time. As demonstrated below, signal must settle on the middle (input of Mux 2) before clock tansists to 1 so the delay due to Mux 1 must be considered, this delay is the setup time.
+
+   ![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/56d9bf92-c5fc-46df-a399-29930db50dcf)
+
+* SU = Setup uncertainty due to jitter which is temporary variation of clock period. This is due to non-idealities of PLL/clock source.
+
+Timing analysis is carried out outside the openLANE flow using OpenSTA tool. For this, pre_sta.conf is required to carry out the STA analysis. Invoke OpenSTA outside the openLANE flow as follows:  
+
+	sta pre_sta.conf
+
+ dc file for OpenSTA is modified like this:  
+
+base.sdc is located in vsdstdcelldesigns/extras directory. So, I copied it into our design folder using
+
+	cp my_base.sdc /home/pranathi/OpenLane/designs/picorv32a/src/  
+
+ ![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/ba8f6469-ab76-4964-b063-8952ca014dc5)
+
+Since I have no Violations I skipped this, but have hands on experience on timing analysis using OpenSTA.  
+
+Since clock is propagated only once we do CTS, In placement stage, clock is considered to be ideal. So only setup slack is taken into consideration before CTS.  
+
+	Setup time: minimum time required for the data to be stable before the active edge of the clock to get properly captured.
+
+	Setup slack : data required time - data arrival time 
+
+Clock is generated from PLL which has inbuilt circuit which cells and some logic. There might variations in the clock generation depending upon the ckt. These variations are collectivity known as clock uncertainity. In that jitter is one of the parameter. It is uncertain that clock might come at that exact time withought any deviation. That is why it is called clock_uncertainity Skew, Jitter and Margin comes into clock_uncertainity.  
+
+ _Clock Jitter : deviation of clock edge from its original position._  
+
+From the timing report, we can improve slack by upsizing the cells i.e., by replacing the cells with high drive strength and we can see significant changes in the slack.  
+
+ ### <a name="5-3-clock-tree-synthesis-tritoncts-and-signal-integrity"></a> 5.3 Clock tree synthesis TritonCTS and signal integrity ###
+
+ The purpose of building a clock tree is enable the clock input to reach every element and to ensure a zero clock skew. H-tree is a common methodology followed in CTS. Before attempting a CTS run in TritonCTS tool, if the slack was attempted to be reduced in previous run, the netlist may have gotten modified by cell replacement techniques. Therefore, the verilog file needs to be modified using the write_verilog command. In this stage clock is propagated and make sure that clock reaches each and every clock pin from clock source with mininimum skew and insertion delay. Inorder to do this, we implement H-tree using mid point strategy.  
+
+* Balanced Tree CTS: In a balanced tree CTS, the clock signal is distributed in a balanced manner, often resembling a binary tree structure. This approach aims to provide roughly equal path lengths to all clock sinks (flip-flops) to minimize clock skew. It's relatively straightforward to implement and analyze but may not be the most power-efficient solution.  
+
+* H-tree CTS: An H-tree CTS uses a hierarchical tree structure, resembling the letter "H." It is particularly effective for distributing clock signals across large chip areas. The hierarchical structure can help reduce clock skew and optimize power consumption.
+
+![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/d056a221-8102-41f3-9931-fcd8ad41ea87)
+
+* Star CTS: In a star CTS, the clock signal is distributed from a single central point (like a star) to all the flip-flops. This approach simplifies clock distribution and minimizes clock skew but may require a higher number of buffers near the source.  
+
+* Global-Local CTS: Global-Local CTS is a hybrid approach that combines elements of both star and tree topologies. The global clock tree distributes the clock signal to major clock domains, while local trees within each domain further distribute the clock. This approach balances between global and local optimization, addressing both chip-wide and domain-specific clocking requirements.  
+ 
+* Mesh CTS: In a mesh CTS, clock wires are arranged in a mesh-like grid pattern, and each flip-flop is connected to the nearest available clock wire. It is often used in highly regular and structured designs, such as memory arrays. Mesh CTS can offer a balance between simplicity and skew minimization.  
+
+* Adaptive CTS: Adaptive CTS techniques adjust the clock tree structure dynamically based on the timing and congestion constraints of the design. This approach allows for greater flexibility and adaptability in meeting design goals but may be more complex to implement.  
+
+**CrossTalk :** Crosstalk is a disturbance caused by the electric or magnetic fields of one telecommunication signal affecting a signal in an adjacent circuit. Essentially, every electrical signal has a varying electromagnetic field. Whenever these fields overlap, unwanted signals -- capacitive, conductive or inductive coupling -- cause electromagnetic interference (EMI) that can create crosstalk. Overlap can occur with structured cabling, integrated circuit design, audio electronics and other connectivity systems. For example, if there are two wires in close proximity that are carrying different signals, their currents will create magnetic fields that induce a weaker signal in the neighboring wire. Impact: Crosstalk is a significant concern in VLSI design due to the high integration density of components on a chip. Uncontrolled crosstalk can lead to data corruption, timing violations, and increased power consumption. Mitigation: VLSI designers employ various techniques to mitigate crosstalk, such as optimizing layout and routing, using appropriate shielding, implementing proper clock distribution strategies, and utilizing clock gating to reduce dynamic power consumption when logic is idle.
+
+![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/7f812b6e-5282-4ff5-9620-cf8e4adf9209)
+
+**Clock Net Shielding :** Shielding is done so as to prevent gltch. Shields are connected to VDD or GND. The shields do not switch.VLSI designers may use shielding techniques to isolate the clock network from other signals, reducing the risk of interference. This can include dedicated clock routing layers, clock tree synthesis algorithms, and buffer insertion to manage clock distribution more effectively. Clock Domain Isolation: VLSI designs often have multiple clock domains. Shielding and proper clock gating help ensure that clock signals do not propagate between domains, avoiding metastability issues and maintaining synchronization.  
+
+![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/60021879-2d44-480a-9a5c-3a4254a5b225)
+
+##### CTS #####
+
+The purpose of building a clock tree is enable the clock input to reach every element and to ensure a zero clock skew. H-tree is a common methodology followed in CTS. Before attempting a CTS run in TritonCTS tool, if the slack was attempted to be reduced in previous run, the netlist may have gotten modified by cell replacement techniques. Therefore, the verilog file needs to be modified using the write_verilog command. Then, the synthesis, floorplan and placement is run again.  
+
+To run CTS use the below command:  
+
+	run_cts
+
+After CTS run, my slack values are:  _setup:12.97_ , _Hold:0.23_  
+
+Here, my both values are not voilating. Since, clock is propagated, from this stage, we do timing analysis with real clocks. From now post cts analysis is performed by operoad within the openlane flow.  
+
+	openroad
+	read_lef <path of merge.nom.lef>
+	read_def <path of def>
+	write_db pico_cts.db
+	read_db pico_cts.db
+	read_verilog /home/parallels/OpenLane/designs/picorv32a/runs/RUN_09-09_11-20/results/synthesis/picorv32a.v
+	read_liberty $::env(LIB_SYNTH_COMPLETE)
+	read_sdc /home/parallels/OpenLane/designs/picorv32a/src/my_base.sdc
+	set_propagated_clock (all_clocks)
+	report_checks -path_delay min_max -format full_clock_expanded -digits 4
+
+Hold slack:  
+
+![266975440-7a0875ab-5d58-491c-a026-846e327d5abf](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/0a6ddb4f-e1ab-45cc-8892-f1ade2fbd0e8)
+
+Setup slack: 
+
+![266975445-59a9cdcd-3176-4cef-852d-8359d3f4b3d2](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/471b8843-75e2-43d9-800b-ddc999a13f9e)
 
 
 

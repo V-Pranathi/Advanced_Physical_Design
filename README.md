@@ -775,10 +775,13 @@ Notice how skew is zero since delay for both clock path is x9'+y15.
 
   ![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/c2f85093-e978-4b1f-ad8d-f820d6159a0d)
 
-
 **Openlane steps with custom standard cell**  
-We perform synthesis and found that it has positive slack and met timing constraints. During Floorplan,504 endcaps, 6731 tapcells got placed. Design has 275 original rows.  
-Now  _run_placement_
+
+We performed synthesis and found that it has positive slack and met timing constraints.  
+
+	run_floorplan
+ 	run_placement
+  
 After placement, we check for legality &To check the layout invoke magic from the results/placement directory:
 
 	magic -T /home/pranathi/OpenLane/vsdstdcelldesign/libs/sky130A.tech lef read tmp/merged.nom.lef def read results/floorplan/picorv32a.def &

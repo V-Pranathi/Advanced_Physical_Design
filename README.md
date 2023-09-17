@@ -911,7 +911,7 @@ DRC cleaning is the next step after routing. DRC cleaning is done to ensure the 
 
 ### <a name="6-2-power-distribution-network-and-routing"></a> 6.2 Power Distribution Network and routing ###
 
-Unlike the general ASIC flow, Power Distribution Network generation is not a part of floorplan run in OpenLANE. PDN must be generated after CTS and post-CTS STA analyses:  
+In ASIC design flows, the Power Distribution Network (PDN) plays a critical role in ensuring that the integrated circuit receives a stable and reliable power supply. In some design flows, especially when using automated tools like OpenLANE, the PDN generation is not part of the initial floorplan stage. Instead, it typically occurs after Clock Tree Synthesis (CTS) and post-CTS Static Timing Analysis (STA) have been completed.  
 
 we can check whether PDN has been created or no by check the current def environment variable:  echo $::env(CURRENT_DEF)  
 
@@ -921,7 +921,7 @@ we can check whether PDN has been created or no by check the current def environ
 
 ![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/a4e3ac38-8e9e-4703-9a39-7e1c6cc79ffb)
 
-* Once the command is given, power distribution netwrok is generated.  
+* Once the command is given, power distribution netwotk is generated.  
 * The power distribution network has to take the design_cts.def as the input def file.  
 * Power rings,strapes and rails are created by PDN.  
 * From VDD and VSS pads, power is drawn to power rings.  
@@ -947,11 +947,9 @@ In summary, TritonRoute is a sophisticated tool that not only performs initial d
 
 **TritonRoute**
 
-We will now finally do the routing, simply run run_routing. This will do both global and detailed routing, this will take multiple optimization iterations until the DRC violation is reduced to zero. The zeroth iteration has 27426 violations and only at the 8th iteration was all violations solved. The whole routing took 1 hour and 10 mins in my Linux machine with 2 cores. A fun fact: the die area is just 584um by 595um but the total wirelength used for routing spans to 0.5m!!!  
+Finally doing the Routing using the command given below  
 
 	run_routing
-
-For the default setting picorv32a takes approximately 30 minutes according to the current version of TritonRoute.  
 
 ![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/32d329db-9580-4b43-a7a3-ea227a4710e7)
 
@@ -959,10 +957,9 @@ Here drc violation is zero:
 
 ![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/ac927841-7a0b-41ae-8a62-081b4360c3ec)
 
-
  **Layout in magic tool post routing:**  
 
- The design can be viewed on magic within results/routing directory. Run the following command in that directory:  
+Viewing the design:
 
 	 magic -T /home/pranathi/OpenLane/vsdstdcelldesign/libs/sky130A.tech lef read tmp/merged.nom.lef def read results/routing/picorv32a.def & 
 
@@ -979,10 +976,8 @@ Here drc violation is zero:
 ## <a name="references"></a> References ##
 
 * https://openlane.readthedocs.io/en/latest/
-* https://woset-workshop.github.io/PDFs/2020/a21.pdf
 * https://github.com/Devipriya1921/Physical_Design_Using_OpenLANE_Sky130#components-of-opensource-digital-asic-design
 * https://github.com/Rachana-Kaparthi/
-* https://github.com/aasthadave9/Advanced-Physical-Design-Using-OpenLANE-Sky130/
 * https://github.com/nickson-jose/vsdstdcelldesign/
 * http://opencircuitdesign.com/magic/
 * https://skywater-pdk.readthedocs.io/en/main/

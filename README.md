@@ -698,7 +698,7 @@ To include the new standard cell in the synthesis and set up the necessary files
       source $filename
 	}
 
-**Running the  OpenLane using the following commands:
+**Running the  OpenLane using the following commands:**
 
 	prep -design picorv32a RUN_2023.09.10_10.42.21 -overwrite
  
@@ -710,11 +710,11 @@ To include the new standard cell in the synthesis and set up the necessary files
  
  ![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/de76c9fc-692e-488a-a369-66af65784f27)
 
-![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/f73c7a30-6fe0-426e-9266-a6d7c8be629d)
+![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/749841dc-8194-432b-99dd-067bfd19425a)
 
 STA Report:
 
-![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/bbaa9660-72c1-4726-b3b4-227f2a3ffebf)
+![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/bf2501e4-3b1a-4338-89c4-fb659d16d262)
 
 ##### Delay Tables #####
 

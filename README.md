@@ -523,10 +523,11 @@ Changes to be made are:
 ### <a name="5-1-timing-modelling-using-delay-tables"></a> 5.1 Timing modelling using delay tables ### 
 **Extracting the LEF file**
 
-PnR tool does not need all informations from the .mag file like the logic part but only PnR boundaries, power/ground ports, and input/output ports. This is what a LEF file actually contains. So the next step is to extract the LEF file from Magic. But first, we need to follow guidelines of the PnR tool for the standard cells:  
-* The input and output ports lies on the intersection of the horizontal and vertical tracks (ensure the routes can reach that ports).
-* The width of the standard cell must be odd multiple of the tracks horizontal pitch and height must be odd multiples of tracks vertical pitch.  
-
+PnR tool does not need all informations from the .mag file like the logic part but only PnR boundaries, power/ground ports, and input/output ports. This is what a LEF file actually contains. So the next step is to extract the LEF file from Magic. The guidelines for using the PnR (Place and Route) tool for designing standard cells in the context of digital integrated circuit design. These guidelines are crucial for ensuring that the standard cells can be properly placed and routed within the chip's layout.   
+* _Input and Output Ports at Intersection of Tracks:_ This guideline suggests that the input and output ports of your standard cells should be located at the intersection of horizontal and vertical tracks. In other words, when you place your standard cells on the chip's layout, make sure that the pins or ports are aligned with the grid formed by the horizontal and vertical routing tracks. This ensures that the routing resources can easily connect to these ports without overlapping or congestion issues.  
+* _Odd Multiples of Track Pitch for Width and Height:_ The width and height of your standard cells should be designed in such a way that they are odd multiples of the horizontal and vertical track pitches, respectively. This is important for several reasons:  
+   1. Alignment with Routing Grid: Using odd multiples ensures that the cells align properly with the grid, making it easier to connect them to other cells and routing resources.
+   2. Avoiding Half-Track Offset: Using odd multiples avoids half-track offsets, which can complicate routing and introduce timing issues.  
 To check these guidelines, we need to change the grid of Magic to match the actual metal tracks. The pdks/sky130A/libs.tech/openlane/sky130_fd_sc_hd/tracks.info contains those metal informations.  
 
 	cd /home/pranathi/.volare/volare/sky130/versions/78b7bc32ddb4b6f14f76883c2e2dc5b5de9d1cbc/sky130A/libs.tech/openlane/sky130_fd_sc_hd
@@ -542,20 +543,30 @@ Accessing the tracks.info file for the pitch and direction information:
 
 The grids show where the routing for the local-interconnet layer can only happen, the distance of the grid lines are the required pitch of the wire. Below, we can see that the guidelines are satisfied:  
 
-2. Next, we will extract the LEF file. The LEF file contains the cell size, port definitions, and properties which aid the placer and router tool. With that, the ports definition, port class, and port use must be set first.
+![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/18201ed8-7050-4ab9-88e2-499603c47727)
 
- The way to define a port is through Magic console and following are the steps:
-
-* In Magic Layout window, first source the .mag file for the design (here inverter). Then Edit >> Text which opens up a dialogue box.
-* When you double press S at the I/O lables, the text automatically takes the string name and size. Ensure the Port enable checkbox is checked and default checkbox is unchecked as shown in the figure:
-
+2. Next, we will extract the LEF file. The LEF file contains the cell size, port definitions, and properties which aid the placer and router tool. Defining ports and setting attributes for a standard cell layout in preparation for extracting a LEF (Library Exchange Format) file. LEF files are essential for providing information about the standard cells to Place and Route (PnR) tools  
+   * Open the Layout in Magic: First, open the layout of the CMOS inverter in the Magic Layout window using the .mag file.  
+   * Access Text Editing: In the Magic Layout window, go to "Edit" and select "Text." This will open a dialogue box for text editing.  
+   *  Define Ports on Each Layer:  
+        * For each layer that you want to turn into a port, create a box on that specific layer.  
+        * Label each port with a name (e.g., "A" for the input port and "Y" for the output port).  
+        * Attach a sticky label to the box that specifies the layer name with which the port needs to be associated (e.g., "locali" for the local interconnect layer).  
+        * Make sure to check the "Port enable" checkbox to indicate that this is a port, and uncheck the "Default" checkbox.
+      
 ![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/8a9ad175-4299-41cd-acf6-d83427c053c6)
 
-* In the above figure, The number in the textarea near enable checkbox defines the order in which the ports will be written in LEF file (0 being the first).   
-* For power and ground layers, the definition could be same or different than the signal layer. Here, ground and power connectivity are taken from metal1.  
+   * Define Port Order: In the text area near the "Enable" checkbox, specify the order in which the ports should be written in the LEF file. The order can be crucial for readability and compatibility with PnR tools, with "0" being the first port.
+   * Handle Power and Ground Layers: For power and ground layers (e.g., metal1), follow a similar procedure to define ports. We can use the same or different definitions than the signal layers. Ensuring to attach sticky labels appropriately to indicate power and ground connectivity.
 
 **Set port class and port use attributes for layout**  
-After defining ports, the next step is setting port class and port use attributes.  
+After defining ports, the next step is setting port class and port use attributes. Setting the "class" and "use" attributes for the ports of your standard cell layout is an important step in preparing the layout for LEF file extraction. These attributes provide information to tools that use the LEF and DEF formats, such as Place and Route (PnR) tools.  
+SEtting the attributes in the tkcon window:
+
+* Select the Port in the Layout Window: In the Magic Layout window, select the port to set the "class" and "use" attributes.  
+* Open the tkcon Window: To open the tkcon window, we can typically use a keyboard shortcut or find it in the Magic software's menu options. You mentioned pressing "s" repeatedly until the port is highlighted, so this may be the keyboard shortcut to activate the tkcon window.  
+* Set the "class" Attribute: In the tkcon window, once the portis  selected, type the following command to set the "class" attribute: set_attribute PORT_CLASS <port_name> <class>  
+* Set the "use" Attribute: Similarly, you can set the "use" attribute using the following command: set_attribute PORT_USE <port_name> <use>  
 
 Select port A in magic:  
 
@@ -579,12 +590,89 @@ LEF extraction can be carried out in tkcon as follows:
 
 	lef write
 
-This generates sky130_vsdinv.lef file.
+This generates sky130_vsdinv.lef file.  
 
-##### Steps to include custom cell in ASIC design #####
-We have created a custom standard cell in previous steps of an inverter. Copy lef file, sky130_fd_sc_hd_typical.lib, sky130_fd_sc_hd_slow.lib & sky130_fd_sc_hd_fast.lib to src folder of picorv32a from libs folder vsdstdcelldesign. Then modify the config.tcl as follows.
+		VERSION 5.7 ;
+ 	 NOWIREEXTENSIONATPIN ON ;
+ 	 DIVIDERCHAR "/" ;
+ 	 BUSBITCHARS "[]" ;
+	MACRO sky130_vsdinv
+ 	 CLASS CORE ;
+ 	 FOREIGN sky130_vsdinv ;
+  	ORIGIN 0.000 0.000 ;
+ 	 SIZE 1.380 BY 2.720 ;
+ 	 SITE unithd ;
+ 	 PIN A	
+    DIRECTION INPUT ;
+    USE SIGNAL ;
+    ANTENNAGATEAREA 0.165600 ;
+    PORT
+      LAYER li1 ;
+        RECT 0.060 1.180 0.510 1.690 ;
+    END
+  	END A
+ 	 PIN Y
+    DIRECTION OUTPUT ;
+    USE SIGNAL ;
+    ANTENNADIFFAREA 0.287800 ;
+    PORT
+      LAYER li1 ;
+        RECT 0.760 1.960 1.100 2.330 ;
+        RECT 0.880 1.690 1.050 1.960 ;
+        RECT 0.880 1.180 1.330 1.690 ;
+        RECT 0.880 0.760 1.050 1.180 ;
+        RECT 0.780 0.410 1.130 0.760 ;
+    END
+	  END Y
+ 	 PIN VPWR
+    DIRECTION INOUT ;
+    USE POWER ;
+    PORT
+      LAYER li1 ;
+        RECT -0.200 2.580 1.430 2.900 ;
+        RECT 0.180 2.330 0.350 2.580 ;
+        RECT 0.100 1.970 0.440 2.330 ;
+      LAYER mcon ;
+        RECT 0.230 2.640 0.400 2.810 ;
+        RECT 1.000 2.650 1.170 2.820 ;
+      LAYER met1 ;
+        RECT -0.200 2.480 1.570 2.960 ;
+    END
+  	END VPWR
+  	PIN VGND
+    DIRECTION INOUT ;
+    USE GROUND ;
+    PORT
+      LAYER li1 ;
+        RECT 0.100 0.410 0.450 0.760 ;
+        RECT 0.150 0.210 0.380 0.410 ;
+        RECT 0.000 -0.150 1.460 0.210 ;
+      LAYER mcon ;
+        RECT 0.210 -0.090 0.380 0.080 ;
+        RECT 1.050 -0.090 1.220 0.080 ;
+      LAYER met1 ;
+        RECT -0.110 -0.240 1.570 0.240 ;
+    END
+ 	 END VGND
+	END sky130_vsdinv
+	END LIBRARY
 
-	
+To include the new standard cell in the synthesis and set up the necessary files, follow these steps:
+* Copy the LEF File: Copy the sky130_vsdinv.lef file to the designs/picorv32a/src directory.  
+* Copy the Library File: Copy the sky130_fd_sc_hd_typical.lib file (and any additional slow and fast library files if needed) from the vsdstdcelldesign/libs directory to the designs/picorv32a/src directory.   
+
+ **Plugging this LEF file to picorv32 flow**
+
+ ![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/1f21b878-615a-4286-bb00-909b67b2aec5)
+ ![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/28b91527-d109-40b1-a739-41db1aaf2e58)
+
+**Steps to include custom cell in ASIC design**  
+
+![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/6da4ad3b-7af1-4da0-8e3d-f7d4b7145189)
+![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/9cfbc13f-ce0c-41fa-a869-7ea14f868dfc)
+
+**Modify config.tcl** 
+
 	{
     "DESIGN_NAME": "picorv32",
     "VERILOG_FILES": "dir::src/picorv32a.v",

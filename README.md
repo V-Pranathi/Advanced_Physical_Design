@@ -782,7 +782,7 @@ We performed synthesis and found that it has positive slack and met timing const
 	run_floorplan
  	run_placement
   
-After placement, we check for legality &To check the layout invoke magic from the results/placement directory:
+After placement, we will see whether the sky130_vsdinv is in the layout or not  
 
 	magic -T /home/pranathi/OpenLane/vsdstdcelldesign/libs/sky130A.tech lef read tmp/merged.nom.lef def read results/floorplan/picorv32a.def &
 
@@ -796,7 +796,7 @@ Pre-layout STA will not yet include effects of clock buffers and net-delay due t
 
 Setup timing analysis equation is:
 
-	Setup timing analysis equation is:
+	Setup timing analysis equation is: Θ < T - S - SU
 
 * Θ = Combinational delay which includes clk to Q delay of launch flop and internal propagation delay of all gates between launch and capture flop  
 * T = Time period, also called the required time  
@@ -817,9 +817,7 @@ base.sdc is located in vsdstdcelldesigns/extras directory. So, I copied it into 
 	cp my_base.sdc /home/pranathi/OpenLane/designs/picorv32a/src/  
 
  ![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/ba8f6469-ab76-4964-b063-8952ca014dc5)
-
-Since I have no Violations I skipped this, but have hands on experience on timing analysis using OpenSTA.  
-
+  
 Since clock is propagated only once we do CTS, In placement stage, clock is considered to be ideal. So only setup slack is taken into consideration before CTS.  
 
 	Setup time: minimum time required for the data to be stable before the active edge of the clock to get properly captured.
@@ -828,7 +826,7 @@ Since clock is propagated only once we do CTS, In placement stage, clock is cons
 
 Clock is generated from PLL which has inbuilt circuit which cells and some logic. There might variations in the clock generation depending upon the ckt. These variations are collectivity known as clock uncertainity. In that jitter is one of the parameter. It is uncertain that clock might come at that exact time withought any deviation. That is why it is called clock_uncertainity Skew, Jitter and Margin comes into clock_uncertainity.  
 
- _Clock Jitter : deviation of clock edge from its original position._  
+ _Clock Jitter :_ deviation of clock edge from its original position._  
 
 From the timing report, we can improve slack by upsizing the cells i.e., by replacing the cells with high drive strength and we can see significant changes in the slack.  
 

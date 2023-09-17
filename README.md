@@ -732,6 +732,49 @@ Delay tables are used to capture the timing model of each cell and is included i
 ![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/6cfe584e-120b-41b6-927e-845df6434236)
 
 Notice how skew is zero since delay for both clock path is x9'+y15.  
+#### Fixing negative slack ####  
+**Synthesis optimization:**
+
+* SYNTH_STRATEGY:  
+        Values: 0 to 3  
+        Explanation: This variable controls the synthesis strategy to optimize the design.  
+            A value of 0 focuses less on optimizing delay and may prioritize other factors.  
+            A value of 3 is the most aggressive in optimizing for timing, potentially sacrificing more area to achieve better timing results.  
+
+* SYNTH_BUFFERING:  
+        Values: 0 or 1  
+        Explanation: This variable determines whether cell buffering is used on high fanout cells to reduce delay caused by high capacitance loads.  
+            A value of 0 may not apply cell buffering to high fanout cells.  
+            A value of 1 enables cell buffering on high fanout cells to reduce delay.  
+
+* SYNTH_SIZING:
+  	Values: 0 or 1  
+        Explanation: This variable controls whether cell sizing is enabled during synthesis.  
+            A value of 0 may not perform cell upsizing or downsizing to meet timing requirements.  
+            A value of 1 allows cell upsizing or downsizing as needed to meet timing constraints.
+* SYNTH_DRIVING_CELL:  
+	Explanation: This variable specifies the type of cell used to drive the input ports, especially important for cells with a high number of fan-outs.  
+            A larger driving cell with higher drive strength may be needed for cells with many fan-outs to ensure signal integrity and minimize delay due to loading.
+
+  		% echo $::env(SYNTH_STRATEGY)
+		% set ::env(SYNTH_STRATEGY) "DELAY 0"
+		% echo $::env(SYNTH_BUFFERING)
+		% echo $::env(SYNTH_SIZING)
+		% set ::env(SYNTH_SIZING) 1
+		% echo $::env(SYNTH_DRIVING_CELL)
+
+  ![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/e911b0d2-049d-41f3-85dd-16a73181c58a)
+
+  Now run synthesis
+
+  		run_synthesis
+  
+  Comparing the reports we can see that area has increased and slack became positive.
+
+  ![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/d665de86-100f-4af5-9c8c-3c115c25b087)
+
+  ![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/c2f85093-e978-4b1f-ad8d-f820d6159a0d)
+
 
 **Openlane steps with custom standard cell**  
 We perform synthesis and found that it has positive slack and met timing constraints. During Floorplan,504 endcaps, 6731 tapcells got placed. Design has 275 original rows.  

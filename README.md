@@ -673,42 +673,42 @@ To include the new standard cell in the synthesis and set up the necessary files
 
 **Modify config.tcl** 
 
-	{
-    "DESIGN_NAME": "picorv32",
-    "VERILOG_FILES": "dir::src/picorv32a.v",
-    "CLOCK_PORT": "clk",
-    "CLOCK_NET": "clk",
-    "GLB_RESIZER_TIMING_OPTIMIZATIONS": true,
-    "RUN_HEURISTIC_DIODE_INSERTION": true,
-    "DIODE_ON_PORTS": "in",
-    "GPL_CELL_PADDING": 2,
-    "DPL_CELL_PADDING": 2,
-    "CLOCK_PERIOD": 24,
-    "FP_CORE_UTIL": 35,
-    "PL_RANDOM_GLB_PLACEMENT": 1,
-    "PL_TARGET_DENSITY": 0.5,
-    "FP_SIZING": "relative",
-    "LIB_SYNTH":"dir::src/sky130_fd_sc_hd__typical.lib",
-    "LIB_FASTEST":"dir::src/sky130_fd_sc_hd__fast.lib",
-    "LIB_SLOWEST":"dir::src/sky130_fd_sc_hd__slow.lib",
-    "LIB_TYPICAL":"dir::src/sky130_fd_sc_hd__typical.lib",
-    "TEST_EXTERNAL_GLOB":"dir::/src/*",
-    "SYNTH_DRIVING_CELL":"sky130_vsdinv",
-    "MAX_FANOUT_CONSTRAINT": 4,
-    "pdk::sky130*": {
-        "MAX_FANOUT_CONSTRAINT": 6,
-        "scl::sky130_fd_sc_ms": {
-            "FP_CORE_UTIL": 30
-        }
-        }
+  	# Design
+	set ::env(DESIGN_NAME) "picorv32a"
+
+	set ::env(VERILOG_FILES) "./designs/picorv32a/src/picorv32a.v"
+	set ::env(SDC_FILES) "./designs/picorv32a/src/picorv32a.sdc"
+
+
+	set ::env(CLOCK_PERIOD) "5.000"
+	set ::env(CLOCK_PORT) "clk"
+
+	set ::env(CLOCK_MET) $::env(CLOCK_PORT) 
+
+
+	set ::env(LIB_SYNTH) "$::env(OPENLANE_ROOT)/designs/picorv32a/src/sky130_fd_sc_hd__typical.lib "
+	set ::env(LIB_MIN) "$::env(OPENLANE_ROOT)/designs/picorv32a/src/sky130_fd_sc_hd__fast.lib"
+	set ::env(LIB_MAX) "$::env(OPENLANE_ROOT)/designs/picorv32a/src/sky130_fd_sc_hd__slow.lib "
+	set ::env(LIB_TYPICAL) "$::env(OPENLANE_ROOT)/designs/picorv32a/src/sky130_fd_sc_hd__typical.lib"
+
+	set ::env(EXTRA_LEFS) [glob $::env(OPENLANE_ROOT)/designs/$::env(DESIGN_NAME)/src/*.lef]   ## this is the new line added to the existing config.tcl file
+
+	set filename $::env(OPENLANE_ROOT)/designs/$::env(DESIGN_NAME)/$::env(PDK)_$::env(STD_CELL_LIBRARY)_config.tcl
+	if { [file exists $filename] == 1 } {
+      source $filename
 	}
 
-Now, run OpenLane using the following commands:
+**Running the  OpenLane using the following commands:
 
-	prep -design picorv32a
+	prep -design picorv32a RUN_2023.09.10_10.42.21 -overwrite
+ 
+        ## additional two lines for running the flow ##
 	set lefs [glob $::env(DESIGN_DIR)/src/*.lef]
 	add_lefs -src $lefs
+ 
 	run_synthesis
+ 
+ ![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/de76c9fc-692e-488a-a369-66af65784f27)
 
 ![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/f73c7a30-6fe0-426e-9266-a6d7c8be629d)
 

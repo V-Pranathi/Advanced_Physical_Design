@@ -782,11 +782,16 @@ We performed synthesis and found that it has positive slack and met timing const
 	run_floorplan
  	run_placement
   
-After placement, we will see whether the sky130_vsdinv is in the layout or not  
+After placement, we will see whether the sky130_vsdinv is in the layout or not.
 
 	magic -T /home/pranathi/OpenLane/vsdstdcelldesign/libs/sky130A.tech lef read tmp/merged.nom.lef def read results/floorplan/picorv32a.def &
 
-![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/d9d0ade6-fa1d-4a03-b778-86b0901f4420)
+![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/1683baa8-3f79-40c0-b746-ca396bae5243)  
+
+We can see that sky130_vsdinv in the layout.   
+
+![image](https://github.com/V-Pranathi/Advanced_Physical_Design/assets/140998763/be266281-92ab-47e5-90c6-0a05677a2fc5)
+
 
 ### <a name="5-2-timing-analysis-with-ideal-clocks-using-opensta"></a> 5.2 Timing analysis with ideal clocks using openSTA ###
 
